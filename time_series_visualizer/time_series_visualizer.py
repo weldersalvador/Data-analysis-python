@@ -19,17 +19,16 @@ def draw_line_plot():
     # Draw line plot
     fig = df.plot(title = 'Daily freeCodeCamp Forum Page Views 5/2016-12/2019'
         ,xlabel = 'Date',ylabel = 'Page Views',red = 'red')
-
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
     return fig
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
+    df_bar = df.groupby(['year','month'])['value'].mean().reset_index()
 
     # Draw bar plot
-
+    
 
 
 
