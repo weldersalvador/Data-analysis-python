@@ -1,7 +1,7 @@
-import pandas as pd
+import medical_data_visualizer
+from unittest import main
 
-df = pd.read_csv('medical_examination.csv')
+medical_data_visualizer.draw_cat_plot()
+medical_data_visualizer.draw_heat_map()
 
-mask = df['weight'] / ((df['height'] / 100)**2) > 25
-
-print(mask)
+main(module='test_module', exit=False)
