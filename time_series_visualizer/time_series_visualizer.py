@@ -10,15 +10,15 @@ df.index = df['date']
 df = df.drop['date']
 
 # Clean data
-df = None
+mask = ((df['value']) >= (df['value'].quantile(0.025)) & (df['value']
+        <= df['value'].quantile(0.975)))
+df = df[mask]
 
 
 def draw_line_plot():
     # Draw line plot
-
-
-
-
+    fig = df.plot(title = 'Daily freeCodeCamp Forum Page Views 5/2016-12/2019'
+        ,xlabel = 'Date',ylabel = 'Page Views',red = 'red')
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
