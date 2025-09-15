@@ -8,7 +8,7 @@ register_matplotlib_converters()
 df = pd.read_csv('fcc-forum-pageviews.csv')
 df.index = df['date']
 df = df.drop(['date'],axis = 1)
-
+df.index = pd.to_datetime(df.index)
 # Clean data
 mask = ((df['value']) >= (df['value'].quantile(0.025))) & ((df['value']) <= df['value'].quantile(0.975))
 df = df[mask]
@@ -16,20 +16,24 @@ df = df[mask]
 
 def draw_line_plot():
     # Draw line plot
-    fig = df.plot(title = 'Daily freeCodeCamp Forum Page Views 5/2016-12/2019'
+    axes = df.plot(title = 'Daily freeCodeCamp Forum Page Views 5/2016-12/2019'
         ,xlabel = 'Date',ylabel = 'Page Views',color = 'red')
+    fig = axes.get_figure()
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
     return fig
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = df.groupby(['year','month'])['value'].mean().reset_index()
-
+    df_bar = df.copy()
+    df_bar['year'] = df_bar.index.year
+    df_bar['month'] = df_bar.index.month
+    df_bar = df_bar.groupby(['year','month'])['value'].mean().reset_index()
     # Draw bar plot
     pivot = df_bar.pivot(index = 'year',columns = 'month',values = 'value')
-    fig = pivot.plot(kind = 'bar',xlabel = 'Year',ylabel= 'Avarage Page Views',
+    axes = pivot.plot(kind = 'bar',xlabel = 'Year',ylabel= 'Avarage Page Views',
         title = 'Accesses per month',figsize=(12,6))
+    fig = axes.get_figure()
     fig.legend('Months')
 
     # Save image and return fig (don't change this part)
@@ -45,14 +49,14 @@ def draw_box_plot():
 
     # Draw box plots (using Seaborn)
     fig,axes = plt.subplots(1,2,figsize=(25,8))
-    fig,axes = plt.subplots(1,2,figsize=(25,8))
     f1 = sns.boxplot(data = df_box, x= 'year',y='value',palette='Set3',ax = axes[0],fliersize = 2)
+    f1.set_xlabel("Year")
     f1.set_ylabel("Page Views")
     f1.set_title("Year-wise Box Plot (Trend)")
     f2 = sns.boxplot(data = df_box,x = 'month',y = 'value',palette = 'Set2',ax = axes[1],fliersize = 2)
     f2.set_ylabel("Page Views")
+    f2.set_xlabel("Month")
     f2.set_title("Month-wise Box Plot (seasonality)")
-
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
     return fig
