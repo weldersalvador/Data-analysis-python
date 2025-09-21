@@ -53,6 +53,5 @@ def draw_heat_map():
 
     sns.heatmap(corr, ax = ax,mask = mask,annot = True,fmt=".1f")
 
-
     fig.savefig('heatmap.png')
     return fig
